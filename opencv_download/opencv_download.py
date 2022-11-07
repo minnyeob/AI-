@@ -41,10 +41,17 @@
 #터미널에서 pip install opencv-python
 #-업데이트시 python -m pip install --upgrade pip
 
+
+
 #pip 안될대 
 # pip install bs4
 # pip install beautifulsoup4
 # pip install django
+
+
+
+
+
 
 #
 #   공대선배
