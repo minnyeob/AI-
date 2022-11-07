@@ -41,7 +41,7 @@
 #터미널에서 pip install opencv-python
 #-업데이트시 python -m pip install --upgrade pip
 
-
+#python 인터프린터를 작업영역을 선택하지 말것
 
 #pip 안될대 
 # pip install bs4
