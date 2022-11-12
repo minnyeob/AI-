@@ -2,6 +2,8 @@
 ## python -m pip install mediapipe opencv-python
 ## 아나콘다 설치
 
+#https://github.com/kairess/gesture-recognition
+
 # conda install tensorflow
 # pip3 install tensorflow
 # conda create -n tf tensorflow
