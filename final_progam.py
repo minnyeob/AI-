@@ -14,6 +14,7 @@ mp_pose = mp.solutions.pose
 # 횟수
 left_counter = 0 
 right_counter = 0 
+
 # 팔의 상황
 left_stage = None
 right_stage = None
@@ -25,7 +26,8 @@ right_done = None
 #set 수
 work_set = 0 
 
-
+#비디오 확인
+video_check = 0
 
 
 # 새로 함수를 생산
@@ -50,20 +52,12 @@ def calculate_angle_left(a,b,c):
     return left_angle 
 
 def calculate_angle_right(a,b,c):
-    # 배열 형태
-    a = np.array(a) # First
-    b = np.array(b) # Mid
-    c = np.array(c) # End
-    
-    # 각도계산
-    #                     Y값          X값
-    # 아크탄젠트로 C(끝)과 B(중간)의 각도를 구함  - A와 B의 각도를 구함
-    # arctan2는 각도를 360도(0~180,0~-180)로 구할 수 있음
+    a = np.array(a) 
+    b = np.array(b) 
+    c = np.array(c) 
     radians = np.arctan2(c[1]-b[1], c[0]-b[0]) - np.arctan2(a[1]-b[1], a[0]-b[0])
-    #                             원주율
     right_angle = np.abs(radians*180.0/np.pi)
     
-    # 팔이 꺾여서 인식이 잘못되는 걸 방지
     if right_angle >180.0:
         right_angle = 360-right_angle
         
@@ -83,6 +77,8 @@ cap = cv2.VideoCapture(0)
 # 카메라가 연결되어있는동안
 with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
     while cap.isOpened():
+        
+        
         # ret = 반환 , farame = 영상
         ret, frame = cap.read()
         
@@ -99,6 +95,8 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
 
         # 시도해보고 오류나면 except실행
         try:
+            video_check = 1
+            cv2.putText(image, 'success', (10,450), cv2.FONT_HERSHEY_DUPLEX, 0.5, (255,255,255),1,cv2.LINE_AA)
             
             landmarks = results.pose_landmarks.landmark
             
@@ -142,8 +140,8 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                 left_stage = "left_down"
             if left_angle < 30 and left_stage =='left_down':
                 left_stage="left_up"
-                if left_done == 0:
-                    left_counter +=1
+                left_counter += 1
+                
                 print(left_counter)
                 
                 
@@ -153,17 +151,17 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                 right_stage = "right_down"
             if right_angle < 30 and right_stage =='right_down':
                 right_stage="right_up"
-                if right_done == 0:
-                    right_counter +=1
+                right_counter += 1
+                
                 print(right_counter)
             # 각도가 30도 이하고 상태가 down 이면 up으로 만들고 1증가
                 
                 
                 
-            if left_counter == 10:
+            if left_counter > 10 :
                 left_counter = 0
                 left_done = 1
-            if right_counter == 10:
+            if right_counter > 10 :
                 right_counter = 0
                 right_done =1
                 
@@ -172,10 +170,15 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                 left_done = 0
                 right_done = 0
                 
+                
             if work_set == 3:
                 break
-                                       
+            
+                
         except:
+            if video_check == 0:
+                cv2.putText(image, 'fail', (10,450), cv2.FONT_HERSHEY_DUPLEX, 0.5, (255,255,255),1,cv2.LINE_AA)
+        
             pass
         
         
