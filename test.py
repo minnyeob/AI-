@@ -5,13 +5,13 @@ import time
 
 import serial
 
-arduino = serial.Serial(port = "COM10", baudrate = 9600)
+arduino = serial.Serial(port = "COM9", baudrate = 9600)
 
 time.sleep(3)
 
-arduino.write(b"test")
+arduino.write(b"holy shit")
 
-time.sleep(1)
+time.sleep(8)
 
 data = arduino.read_all()
 
