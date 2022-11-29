@@ -136,7 +136,7 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             
             # 암컬 카운터 알고리즘
             # 각도가 160도 이상이면 down으로 인식
-            if left_angle > 160:
+            if left_angle > 155:
                 left_stage = "left_down"
             if left_angle < 30 and left_stage =='left_down':
                 left_stage="left_up"
@@ -147,7 +147,7 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                 
                 
                 
-            if right_angle > 160:
+            if right_angle > 155:
                 right_stage = "right_down"
             if right_angle < 30 and right_stage =='right_down':
                 right_stage="right_up"
@@ -158,10 +158,10 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                 
                 
                 
-            if left_counter > 10 :
+            if left_counter == 10 :
                 left_counter = 0
                 left_done = 1
-            if right_counter > 10 :
+            if right_counter == 10 :
                 right_counter = 0
                 right_done =1
                 
@@ -206,13 +206,15 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
         
         # up 인지 down인지
+        
+        # 좌측 횟수, 상태
         cv2.putText(image, 'left_STAGE', (100,70), 
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
         cv2.putText(image, left_stage, 
                     (100,100), 
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
         
-        
+        # 우측 횟수, 상태
         cv2.putText(image, 'right_REPS', (10,140), 
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
         cv2.putText(image, str(right_counter), 
@@ -232,7 +234,7 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         
         
         
-        # Render detections
+        # 랜드마크 그리기, 색상설정
         mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
                                 mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=2), 
                                 mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2) 
