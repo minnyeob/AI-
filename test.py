@@ -1,19 +1,27 @@
 import serial
 import time
 
-py_serial = serial.Serial(
-    port = 'COM5',
-    baudrate=9600,
-)
+# 'COM3' 부분에 환경에 맞는 포트 입력
+ser = serial.Serial('COM8', 9600)
 
 while True:
-    commend = input('hello')
-    py_serial.write(commend.encode())
-    
-    time.sleep(0.1)
-    
-    if py_serial.readable():
-        response = py_serial.readline()
-        print(response[:len(response)-1].decode())
+    if ser.readable():
+        val = input()
 
-# 테스트 결과 b'test'
+        if val == '0':
+            val = val.encode('utf-8')
+            ser.write(val)
+            print("set 1")
+            time.sleep(0.5)
+
+        elif val == '1':
+            val = val.encode('utf-8')
+            ser.write(val)
+            print("set 2")
+            time.sleep(0.5)
+            
+        elif val == '2':
+            val = val.encode('utf-8')
+            ser.write(val)
+            print("set 3")
+            time.sleep(0.5)

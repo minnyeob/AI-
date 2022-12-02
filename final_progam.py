@@ -3,11 +3,15 @@ import cv2
 import mediapipe as mp
 # np = numpy에서 가져옴
 import numpy as np
+
+import serial
+import time
+
 mp_drawing = mp.solutions.drawing_utils
 # 미디어파이프의 Pose 기능
 mp_pose = mp.solutions.pose
 
-    
+ser = serial.Serial('COM8', 9600)    
     
     
 # 카운터에 사용할 변수 지정
@@ -132,6 +136,27 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                                 )
             
             
+            if ser.readable():
+                
+                val = input()
+                
+                if val == '0':
+                    val = val.encode('utf-8')
+                    ser.write(val)
+                    print("set 1")
+                    time.sleep(0.5)
+
+                elif val == '1' :
+                    val = val.encode('utf-8')
+                    ser.write(val)
+                    print("set 2")
+                    time.sleep(0.5)
+                    
+                elif val == '2' :
+                    val = val.encode('utf-8')
+                    ser.write(val)
+                    print("last set")
+                    time.sleep(0.5)
             
             
             # 암컬 카운터 알고리즘
@@ -142,8 +167,6 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                 left_stage="left_up"
                 left_counter += 1
                 
-                print(left_counter)
-                
                 
                 
                 
@@ -152,16 +175,14 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             if right_angle < 30 and right_stage =='right_down':
                 right_stage="right_up"
                 right_counter += 1
-                
-                print(right_counter)
             # 각도가 30도 이하고 상태가 down 이면 up으로 만들고 1증가
                 
                 
                 
-            if left_counter == 10 :
+            if left_counter == 5 :
                 left_counter = 0
                 left_done = 1
-            if right_counter == 10 :
+            if right_counter == 5 :
                 right_counter = 0
                 right_done =1
                 
@@ -170,9 +191,10 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                 left_done = 0
                 right_done = 0
                 
-                
             if work_set == 3:
                 break
+            
+                        
             
                 
         except:
