@@ -22,19 +22,17 @@
      
               
       
-## 진행 LOG
---------------------------------------
-### 과제선정(221125)   
+## 진행 LOG      
+
+### 과제선정(221025)   
 
 ### 수신호 인식 프로그램 (221025~221122)
-[AI 과제선정 PPT](https://github.com/minnyeob/AI_project/files/9906815/221026_5.AI.PPT.pptx)
 
-[참고 링크1](https://youtu.be/eHxDWhtbRCk)
-
-### 세부 내용
 221101
 > 과제선정 발표용 PPT 최종 수정
 > Opencv의 설치방법 연구
+> [AI 과제선정 PPT](https://github.com/minnyeob/AI_project/files/9906815/221026_5.AI.PPT.pptx)   
+> [참고 링크1](https://youtu.be/eHxDWhtbRCk)
 
 221108
 > Opencv의 설치완료
