@@ -11,7 +11,7 @@ mp_drawing = mp.solutions.drawing_utils
 # 미디어파이프의 Pose 기능
 mp_pose = mp.solutions.pose
 
-ser = serial.Serial('COM8', 9600)    
+ser = serial.Serial('COM8', 9600)
     
     
 # 카운터에 사용할 변수 지정
@@ -28,7 +28,7 @@ left_done = None
 right_done = None
 
 #set 수
-work_set = 0 
+work_set = 0
 
 #비디오 확인
 video_check = 0
@@ -73,8 +73,6 @@ def calculate_angle_right(a,b,c):
 
 
 
-
-
 # 카메라 연결
 cap = cv2.VideoCapture(0)
 
@@ -96,7 +94,9 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         # 영상을 RGB에서 BRG로 전환
         image.flags.writeable = True
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-
+        
+        
+                            
         # 시도해보고 오류나면 except실행
         try:
             video_check = 1
@@ -136,27 +136,6 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                                 )
             
             
-            if ser.readable():
-                
-                val = input()
-                
-                if val == '0':
-                    val = val.encode('utf-8')
-                    ser.write(val)
-                    print("set 1")
-                    time.sleep(0.5)
-
-                elif val == '1' :
-                    val = val.encode('utf-8')
-                    ser.write(val)
-                    print("set 2")
-                    time.sleep(0.5)
-                    
-                elif val == '2' :
-                    val = val.encode('utf-8')
-                    ser.write(val)
-                    print("last set")
-                    time.sleep(0.5)
             
             
             # 암컬 카운터 알고리즘
@@ -170,19 +149,21 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                 
                 
                 
+                
             if right_angle > 155:
                 right_stage = "right_down"
             if right_angle < 30 and right_stage =='right_down':
                 right_stage="right_up"
                 right_counter += 1
+                
             # 각도가 30도 이하고 상태가 down 이면 up으로 만들고 1증가
                 
                 
                 
-            if left_counter == 5 :
+            if left_counter >= 5 :
                 left_counter = 0
                 left_done = 1
-            if right_counter == 5 :
+            if right_counter >= 5 :
                 right_counter = 0
                 right_done =1
                 
@@ -191,12 +172,10 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                 left_done = 0
                 right_done = 0
                 
-            if work_set == 3:
-                break
-            
+               
                         
-            
-                
+            if work_set == 3:
+                break     
         except:
             if video_check == 0:
                 cv2.putText(image, 'fail', (10,450), cv2.FONT_HERSHEY_DUPLEX, 0.5, (255,255,255),1,cv2.LINE_AA)
@@ -205,6 +184,25 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         
         
     
+        if ser.readable():
+            val = str(work_set)
+            
+            
+            
+            if val == '0':
+                val = val.encode('utf-8')
+                ser.write(val)
+                time.sleep(0.01)
+
+            elif val == '1':
+                val = val.encode('utf-8')
+                ser.write(val)
+                time.sleep(0.01)
+                
+            elif val == '2':
+                    val = val.encode('utf-8')
+                    ser.write(val)
+                    time.sleep(0.01)
         
         # 암컬 카운터 진행
         # 현재 상황 표시
@@ -228,15 +226,13 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
         
         # up 인지 down인지
-        
-        # 좌측 횟수, 상태
         cv2.putText(image, 'left_STAGE', (100,70), 
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
         cv2.putText(image, left_stage, 
                     (100,100), 
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
         
-        # 우측 횟수, 상태
+        
         cv2.putText(image, 'right_REPS', (10,140), 
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
         cv2.putText(image, str(right_counter), 
@@ -256,7 +252,7 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         
         
         
-        # 랜드마크 그리기, 색상설정
+        # Render detections
         mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
                                 mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=2), 
                                 mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2) 
