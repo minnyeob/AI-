@@ -11,7 +11,7 @@ mp_drawing = mp.solutions.drawing_utils
 # 미디어파이프의 Pose 기능
 mp_pose = mp.solutions.pose
 
-ser = serial.Serial('COM8', 9600)
+ser = serial.Serial('COM5', 9600)
     
     
 # 카운터에 사용할 변수 지정
